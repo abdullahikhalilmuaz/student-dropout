@@ -13,7 +13,6 @@ import Settings from "./pages/Settings";
 import Header from "./components/Header";
 import DashboardLayout from "./layouts/DashboardLayout";
 import "./styles/global.css";
-import "./app.css";
 import Sidebar from "./components/Sidebar";
 
 export default function App() {
