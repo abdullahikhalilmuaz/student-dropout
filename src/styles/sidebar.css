@@ -1,0 +1,238 @@
+/* src/styles/sidebar.css */
+
+/* Hamburger button - hidden on desktop */
+.hamburger-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 9001;
+  background: #14172b;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.2s ease;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hamburger-btn:hover {
+  background: #1a1d3e;
+}
+
+/* Overlay for mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 8999;
+  backdrop-filter: blur(4px);
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 97vh;
+  width: 260px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #14172b;
+  color: #fff;
+  padding: 22px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 9000;
+  font-family: "Inter", sans-serif;
+  margin: 10px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reports-icons-system {
+  color: orange;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  margin-bottom: 32px;
+  color: #818cf8;
+}
+
+.sidebar-header h2 {
+  font-family: "Manrope", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  margin-left: 10px;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-nav a,
+.nav-section-header {
+  display: flex;
+  align-items: center;
+  padding: 11px 22px;
+  color: #9497b0;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sidebar-nav a:hover,
+.nav-section-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.sidebar-nav a.active {
+  background: rgba(99, 102, 241, 0.16);
+  color: #a5b4fc;
+  border-right: 3px solid #818cf8;
+  font-weight: 600;
+}
+
+.nav-section-header {
+  justify-content: flex-start;
+}
+
+.nav-section-header svg:first-child {
+  margin-right: 0;
+}
+
+.nav-section-header .reports-icon {
+  flex: 1;
+}
+
+.nav-section-header.open {
+  color: #fff;
+}
+
+.nav-section-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-section-items a {
+  padding-left: 40px;
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-footer {
+  padding: 18px 22px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-user .avatar {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+}
+
+.admin-user p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.admin-user small {
+  font-size: 12px;
+  color: #7c7f98;
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media only screen and (max-width: 750px) {
+  /* Show hamburger button */
+  .hamburger-btn {
+    display: flex;
+  }
+
+  /* Sidebar slides off-screen */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    border-radius: 0;
+    margin: 0;
+    transform: translateX(-100%);
+    padding-top: 20px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* When open, slide in */
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Show overlay when sidebar is open */
+  .sidebar-overlay.show {
+    display: block;
+  }
+
+  /* Adjust header padding for mobile */
+  .sidebar-header {
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+
+  /* Smaller text on mobile */
+  .sidebar-nav a,
+  .nav-section-header {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  .nav-section-items a {
+    padding-left: 36px;
+    font-size: 12.5px;
+  }
+
+  .sidebar-footer {
+    padding: 14px 20px 4px;
+  }
+}
+
+/* For very small screens */
+@media only screen and (max-width: 380px) {
+  .sidebar {
+    width: 260px;
+  }
+}

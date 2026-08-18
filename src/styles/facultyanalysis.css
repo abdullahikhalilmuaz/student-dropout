@@ -1,0 +1,58 @@
+/* src/styles/facultyanalysis.css */
+.faculty-header {
+  margin-bottom: 24px;
+}
+
+.faculty-header p {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.faculty-table-container {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.faculty-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.faculty-table th {
+  background: #f9fafb;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.faculty-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+}
+
+.percentage-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.percentage-bar .percentage-fill {
+  display: inline-block;
+  height: 6px;
+  background: #dc2626;
+  border-radius: 3px;
+  transition: width 0.3s;
+  min-width: 20px;
+}
+
+.percentage-value {
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a1a2e;
+}

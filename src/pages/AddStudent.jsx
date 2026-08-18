@@ -1,0 +1,239 @@
+// src/pages/AddStudent.jsx
+import { useState } from "react";
+import api from "../api/axios";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
+import "../styles/add.css";
+
+function AddStudent() {
+  const [formData, setFormData] = useState({
+    matricNo: "",
+    fullName: "",
+    faculty: "",
+    department: "",
+    level: "",
+    gender: "",
+    age: "",
+    cgpa: "",
+    attendance: "",
+    carryovers: "",
+    feesPaid: false,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [predictionResult, setPredictionResult] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setPredictionResult(null);
+
+    try {
+      setLoading(true);
+      const res = await api.post("/students", formData);
+
+      setPredictionResult({
+        risk: res.data.riskLevel,
+        probability: res.data.probability,
+      });
+
+      setFormData({
+        matricNo: "",
+        fullName: "",
+        faculty: "",
+        department: "",
+        level: "",
+        gender: "",
+        age: "",
+        cgpa: "",
+        attendance: "",
+        carryovers: "",
+        feesPaid: false,
+      });
+
+      setTimeout(() => {
+        setPredictionResult(null);
+      }, 5000);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add student. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="dashboard-container">
+      <Sidebar />
+      <Header />
+      <div className="main-content">
+        <div className="dashboard-content">
+          <div className="add-student-container">
+            <h2>Add Student</h2>
+            <p>Enter student details and AI will predict dropout risk</p>
+
+            {predictionResult && (
+              <div
+                className={`prediction-result ${predictionResult.risk.toLowerCase()}`}
+              >
+                <h3>AI Prediction Result</h3>
+                <div className="prediction-details">
+                  <span className="risk-label">Risk Level:</span>
+                  <span
+                    className={`risk-value ${predictionResult.risk.toLowerCase()}`}
+                  >
+                    {predictionResult.risk}
+                  </span>
+                  <span className="probability-label">Probability:</span>
+                  <span className="probability-value">
+                    {predictionResult.probability}%
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Matric No *</label>
+                  <input
+                    name="matricNo"
+                    placeholder="e.g., UMRUC3C/003"
+                    value={formData.matricNo}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Full Name *</label>
+                  <input
+                    name="fullName"
+                    placeholder="Enter full name"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Faculty</label>
+                  <input
+                    name="faculty"
+                    placeholder="Enter faculty"
+                    value={formData.faculty}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Department</label>
+                  <input
+                    name="department"
+                    placeholder="Enter department"
+                    value={formData.department}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Level</label>
+                  <input
+                    type="number"
+                    name="level"
+                    placeholder="e.g., 100, 200"
+                    value={formData.level}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Gender</label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Age</label>
+                  <input
+                    type="number"
+                    name="age"
+                    placeholder="Enter age"
+                    value={formData.age}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>CGPA</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="cgpa"
+                    placeholder="e.g., 3.50"
+                    value={formData.cgpa}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Attendance (%)</label>
+                  <input
+                    type="number"
+                    name="attendance"
+                    placeholder="e.g., 75"
+                    value={formData.attendance}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Carryovers</label>
+                  <input
+                    type="number"
+                    name="carryovers"
+                    placeholder="Number of carryovers"
+                    value={formData.carryovers}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group full-width">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="feesPaid"
+                      checked={formData.feesPaid}
+                      onChange={handleChange}
+                    />
+                    Fees Paid
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" disabled={loading}>
+                {loading ? "Saving..." : "Save Student"}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddStudent;
