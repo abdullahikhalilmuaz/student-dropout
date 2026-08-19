@@ -175,7 +175,162 @@
   color: #7c7f98;
 }
 
+/* ========================================== */
+/* SYSTEM STATUS - ADDED BELOW */
+/* ========================================== */
+
+.sidebar-system-status {
+  padding: 16px 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7c7f98;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.status-header svg {
+  color: #7c7f98;
+}
+
+.status-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.status-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d1d5db;
+  font-size: 13px;
+}
+
+.status-item-left svg {
+  color: #7c7f98;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-emoji {
+  font-size: 12px;
+}
+
+.status-label {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.status-online .status-label {
+  color: #34d399;
+}
+
+.status-starting .status-label {
+  color: #fbbf24;
+}
+
+.status-sleeping .status-label {
+  color: #7c7f98;
+}
+
+.status-offline .status-label {
+  color: #f87171;
+}
+
+.wake-btn {
+  width: 100%;
+  padding: 7px 12px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 8px;
+  color: #818cf8;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
+}
+
+.wake-btn:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
+}
+
+.wake-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.wake-btn svg {
+  flex-shrink: 0;
+}
+
+.wake-btn .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile adjustments for System Status */
+@media only screen and (max-width: 750px) {
+  .sidebar-system-status {
+    padding: 12px 20px;
+  }
+
+  .status-item-left {
+    font-size: 12px;
+  }
+
+  .status-label {
+    font-size: 10px;
+  }
+
+  .wake-btn {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+/* ========================================== */
 /* ===== MOBILE RESPONSIVENESS ===== */
+/* ========================================== */
+
 @media only screen and (max-width: 750px) {
   /* Show hamburger button */
   .hamburger-btn {
