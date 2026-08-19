@@ -123,56 +123,60 @@ function Students() {
           </div>
 
           <div className="students-table-container">
-            <table className="students-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Matric No</th>
-                  <th>Full Name</th>
-                  <th>Faculty</th>
-                  <th>Department</th>
-                  <th>Level</th>
-                  <th>CGPA</th>
-                  <th>Risk Level</th>
-                  <th>Probability</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentStudents.map((student, index) => (
-                  <tr key={student._id}>
-                    <td>{indexOfFirstItem + index + 1}</td>
-                    <td>{student.matricNo}</td>
-                    <td>{student.fullName}</td>
-                    <td>{student.faculty || "N/A"}</td>
-                    <td>{student.department || "N/A"}</td>
-                    <td>{student.level || "N/A"}</td>
-                    <td>{student.cgpa?.toFixed(2) || "N/A"}</td>
-                    <td>
-                      <RiskBadge risk={student.riskLevel} />
-                    </td>
-                    <td>
-                      {student.probability ? `${student.probability}%` : "N/A"}
-                    </td>
-                    <td className="actions">
-                      <button className="action-btn view" title="View">
-                        <Eye size={16} />
-                      </button>
-                      {/* <button className="action-btn edit" title="Edit">
-                        <Edit size={16} />
-                      </button> */}
-                      <button
-                        className="action-btn delete"
-                        title="Delete"
-                        onClick={() => handleDelete(student._id)}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
+            <div className="table-wrapper">
+              {" "}
+              {/* ← ADD THIS WRAPPER */}
+              <table className="students-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Matric No</th>
+                    <th>Full Name</th>
+                    <th>Faculty</th>
+                    <th>Department</th>
+                    <th>Level</th>
+                    <th>CGPA</th>
+                    <th>Risk Level</th>
+                    <th>Probability</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {currentStudents.map((student, index) => (
+                    <tr key={student._id}>
+                      <td>{indexOfFirstItem + index + 1}</td>
+                      <td>{student.matricNo}</td>
+                      <td>{student.fullName}</td>
+                      <td>{student.faculty || "N/A"}</td>
+                      <td>{student.department || "N/A"}</td>
+                      <td>{student.level || "N/A"}</td>
+                      <td>{student.cgpa?.toFixed(2) || "N/A"}</td>
+                      <td>
+                        <RiskBadge risk={student.riskLevel} />
+                      </td>
+                      <td>
+                        {student.probability
+                          ? `${student.probability}%`
+                          : "N/A"}
+                      </td>
+                      <td className="actions">
+                        <button className="action-btn view" title="View">
+                          <Eye size={16} />
+                        </button>
+                        <button
+                          className="action-btn delete"
+                          title="Delete"
+                          onClick={() => handleDelete(student._id)}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>{" "}
+            {/* ← CLOSE WRAPPER */}
           </div>
 
           {filteredStudents.length === 0 && (

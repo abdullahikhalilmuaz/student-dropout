@@ -1,8 +1,9 @@
 // src/pages/AddStudent.jsx
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import api from "../api/axios";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { X, AlertTriangle, CheckCircle } from "lucide-react";
 import "../styles/add.css";
 
 function AddStudent() {
@@ -22,6 +23,7 @@ function AddStudent() {
 
   const [loading, setLoading] = useState(false);
   const [predictionResult, setPredictionResult] = useState(null);
+  const resultRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,15 +60,26 @@ function AddStudent() {
         feesPaid: false,
       });
 
+      // Auto-scroll to result after it renders
       setTimeout(() => {
-        setPredictionResult(null);
-      }, 5000);
+        if (resultRef.current) {
+          resultRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      }, 100);
+
     } catch (err) {
       console.error(err);
       alert("Failed to add student. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeResult = () => {
+    setPredictionResult(null);
   };
 
   return (
@@ -76,28 +89,14 @@ function AddStudent() {
       <div className="main-content">
         <div className="dashboard-content">
           <div className="add-student-container">
-            <h2>Add Student</h2>
-            <p>Enter student details and AI will predict dropout risk</p>
+            <h2>Add New Student</h2>
+            <p>Enter student information and get AI-powered dropout risk prediction</p>
 
-            {predictionResult && (
-              <div
-                className={`prediction-result ${predictionResult.risk.toLowerCase()}`}
-              >
-                <h3>AI Prediction Result</h3>
-                <div className="prediction-details">
-                  <span className="risk-label">Risk Level:</span>
-                  <span
-                    className={`risk-value ${predictionResult.risk.toLowerCase()}`}
-                  >
-                    {predictionResult.risk}
-                  </span>
-                  <span className="probability-label">Probability:</span>
-                  <span className="probability-value">
-                    {predictionResult.probability}%
-                  </span>
-                </div>
-              </div>
-            )}
+            {/* Student Information Section */}
+            <div className="section-header">
+              <h3>Student Information</h3>
+              <p>Fill in all required fields to generate accurate prediction</p>
+            </div>
 
             <form onSubmit={handleSubmit}>
               <div className="form-grid">
@@ -105,7 +104,7 @@ function AddStudent() {
                   <label>Matric No *</label>
                   <input
                     name="matricNo"
-                    placeholder="e.g., UMRUC3C/003"
+                    placeholder="e.g. UMRUC3C/003"
                     value={formData.matricNo}
                     onChange={handleChange}
                     required
@@ -161,7 +160,7 @@ function AddStudent() {
                     value={formData.gender}
                     onChange={handleChange}
                   >
-                    <option value="">Select Gender</option>
+                    <option value="">Select gender</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
                   </select>
@@ -195,7 +194,7 @@ function AddStudent() {
                   <input
                     type="number"
                     name="attendance"
-                    placeholder="e.g., 75"
+                    placeholder="Enter attendance percentage"
                     value={formData.attendance}
                     onChange={handleChange}
                   />
@@ -229,6 +228,52 @@ function AddStudent() {
                 {loading ? "Saving..." : "Save Student"}
               </button>
             </form>
+
+            {/* AI Prediction Result - New Design */}
+            {predictionResult && (
+              <div 
+                ref={resultRef}
+                className={`prediction-result-card ${predictionResult.risk.toLowerCase()}`}
+              >
+                <button className="close-result-btn" onClick={closeResult}>
+                  <X size={20} />
+                </button>
+                
+                <div className="prediction-header">
+                  <h3>AI Prediction Result</h3>
+                  <span className="prediction-subtitle">Risk assessment using Machine Learning</span>
+                </div>
+
+                <div className="prediction-risk-badge">
+                  <div className={`risk-level-badge ${predictionResult.risk.toLowerCase()}`}>
+                    {predictionResult.risk}
+                  </div>
+                </div>
+
+                <div className="prediction-details-grid">
+                  <div className="prediction-detail-item">
+                    <span className="detail-label">Risk Level</span>
+                    <span className={`detail-value risk ${predictionResult.risk.toLowerCase()}`}>
+                      {predictionResult.risk}
+                    </span>
+                  </div>
+                  <div className="prediction-detail-item">
+                    <span className="detail-label">Probability Score</span>
+                    <span className="detail-value probability">
+                      {predictionResult.probability}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className={`prediction-warning ${predictionResult.risk.toLowerCase()}`}>
+                  <AlertTriangle size={18} />
+                  <p>
+                    <strong>This student has a high probability of dropout.</strong><br />
+                    Immediate attention is recommended.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

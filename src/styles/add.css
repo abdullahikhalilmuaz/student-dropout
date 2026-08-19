@@ -294,3 +294,260 @@
     font-size: 15px;
   }
 }
+
+/* src/styles/add.css - Add these new styles at the bottom */
+
+/* Section Header */
+.section-header {
+  margin: 24px 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--bg-app);
+}
+
+.section-header h3 {
+  font-family: "Manrope", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.section-header p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* AI Prediction Result Card - New Design */
+.prediction-result-card {
+  position: relative;
+  margin-top: 32px;
+  padding: 32px 32px 28px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prediction-result-card.high {
+  border-left: 6px solid var(--danger);
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+}
+
+.prediction-result-card.low {
+  border-left: 6px solid var(--success);
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+/* Close Button */
+.close-result-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-result-btn:hover {
+  background: #f3f4f6;
+  color: var(--ink);
+  transform: rotate(90deg);
+}
+
+/* Prediction Header */
+.prediction-header {
+  margin-bottom: 20px;
+}
+
+.prediction-header h3 {
+  font-family: "Manrope", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.prediction-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Risk Badge */
+.prediction-risk-badge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.risk-level-badge {
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.risk-level-badge.high {
+  background: #fee2e2;
+  color: var(--danger);
+  border: 1px solid #fca5a5;
+}
+
+.risk-level-badge.low {
+  background: #dcfce7;
+  color: var(--success);
+  border: 1px solid #86efac;
+}
+
+/* Prediction Details Grid */
+.prediction-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.prediction-detail-item {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  background: var(--bg-app);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.detail-value.risk.high {
+  color: var(--danger);
+}
+
+.detail-value.risk.low {
+  color: var(--success);
+}
+
+.detail-value.probability {
+  color: var(--ink);
+}
+
+/* Prediction Warning */
+.prediction-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+.prediction-warning.high {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+}
+
+.prediction-warning.low {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+}
+
+.prediction-warning svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--danger);
+}
+
+.prediction-warning.high svg {
+  color: var(--danger);
+}
+
+.prediction-warning.low svg {
+  color: var(--success);
+}
+
+.prediction-warning p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.prediction-warning p strong {
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .prediction-result-card {
+    padding: 24px 20px 20px;
+  }
+
+  .prediction-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-level-badge {
+    font-size: 22px;
+    padding: 10px 24px;
+  }
+
+  .close-result-btn {
+    top: 8px;
+    right: 8px;
+  }
+
+  .prediction-warning {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .prediction-result-card {
+    padding: 18px 14px 16px;
+  }
+
+  .risk-level-badge {
+    font-size: 18px;
+    padding: 8px 16px;
+  }
+
+  .detail-value {
+    font-size: 17px;
+  }
+}
