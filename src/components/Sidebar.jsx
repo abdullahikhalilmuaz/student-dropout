@@ -34,57 +34,78 @@ function Sidebar() {
   const [isWaking, setIsWaking] = useState(false);
   const wakeIntervalRef = useRef(null);
   const wakeTimeoutRef = useRef(null);
+  const isMountedRef = useRef(true);
 
   const BACKEND_URL = "https://student-dropout-ml-server.onrender.com";
   const AI_URL = "https://ai-model-prediction.onrender.com";
 
-  // Ping a single service
-  const pingService = async (url, timeout = 5000) => {
+  // Ping a single service with better error handling
+  const pingService = async (url, timeout = 8000) => {
     try {
       const response = await axios.get(url, {
         timeout: timeout,
         headers: {
           Accept: "application/json",
+          "Cache-Control": "no-cache",
         },
+        // Don't throw on any status - we just want to see if it responds
+        validateStatus: () => true,
       });
-      return { success: true, data: response.data };
+
+      // Any response (even 404, 500, etc.) means the server is awake
+      return { success: true, status: response.status, data: response.data };
     } catch (error) {
-      // If it's a timeout or network error, consider it offline/sleeping
-      if (error.code === "ECONNABORTED" || error.message.includes("timeout")) {
+      // Only consider it a failure if it's a network error or timeout
+      if (error.code === "ECONNABORTED" || error.message?.includes("timeout")) {
         return { success: false, error: "timeout" };
       }
-      // If it's a CORS or other error but server responded, consider it online
+      // If there's a response (even error response), server is online
       if (error.response) {
-        return { success: true, data: error.response.data };
+        return { success: true, status: error.response.status };
       }
+      // Network error (DNS, connection refused, etc.)
       return { success: false, error: error.message };
     }
   };
 
-  // Check all services
+  // Check all services and update statuses
   const checkAllServices = async () => {
-    const [backendResult, aiResult] = await Promise.all([
-      pingService(BACKEND_URL),
-      pingService(AI_URL),
-    ]);
+    try {
+      const [backendResult, aiResult] = await Promise.all([
+        pingService(BACKEND_URL),
+        pingService(AI_URL),
+      ]);
 
-    setBackendStatus(backendResult.success ? "online" : "sleeping");
-    setAiStatus(aiResult.success ? "online" : "sleeping");
+      if (isMountedRef.current) {
+        setBackendStatus(backendResult.success ? "online" : "sleeping");
+        setAiStatus(aiResult.success ? "online" : "sleeping");
+      }
 
-    return { backendResult, aiResult };
+      return { backendResult, aiResult };
+    } catch (error) {
+      console.error("Error checking services:", error);
+      return {
+        backendResult: { success: false },
+        aiResult: { success: false },
+      };
+    }
   };
 
   // Initial check on mount
   useEffect(() => {
+    isMountedRef.current = true;
     checkAllServices();
 
     // Cleanup on unmount
     return () => {
+      isMountedRef.current = false;
       if (wakeIntervalRef.current) {
         clearInterval(wakeIntervalRef.current);
+        wakeIntervalRef.current = null;
       }
       if (wakeTimeoutRef.current) {
         clearTimeout(wakeTimeoutRef.current);
+        wakeTimeoutRef.current = null;
       }
     };
   }, []);
@@ -94,20 +115,22 @@ function Sidebar() {
     // Clear any existing intervals
     if (wakeIntervalRef.current) {
       clearInterval(wakeIntervalRef.current);
+      wakeIntervalRef.current = null;
     }
     if (wakeTimeoutRef.current) {
       clearTimeout(wakeTimeoutRef.current);
+      wakeTimeoutRef.current = null;
     }
 
     setIsWaking(true);
     setBackendStatus("starting");
     setAiStatus("starting");
 
-    // Send initial wake-up requests
+    // Send initial wake-up requests (these will likely timeout but wake the service)
     try {
-      await Promise.all([
-        axios.get(BACKEND_URL).catch(() => {}),
-        axios.get(AI_URL).catch(() => {}),
+      await Promise.allSettled([
+        axios.get(BACKEND_URL, { timeout: 3000 }).catch(() => {}),
+        axios.get(AI_URL, { timeout: 3000 }).catch(() => {}),
       ]);
     } catch (error) {
       // Ignore errors - just trying to wake the services
@@ -121,11 +144,13 @@ function Sidebar() {
       attempts++;
 
       const [backendResult, aiResult] = await Promise.all([
-        pingService(BACKEND_URL),
-        pingService(AI_URL),
+        pingService(BACKEND_URL, 5000),
+        pingService(AI_URL, 5000),
       ]);
 
-      // Update statuses
+      if (!isMountedRef.current) return;
+
+      // Update statuses based on results
       if (backendResult.success) {
         setBackendStatus("online");
       } else if (attempts >= maxAttempts) {
@@ -143,8 +168,10 @@ function Sidebar() {
       const bothFailed = attempts >= maxAttempts;
 
       if (bothOnline || bothFailed) {
-        clearInterval(wakeIntervalRef.current);
-        wakeIntervalRef.current = null;
+        if (wakeIntervalRef.current) {
+          clearInterval(wakeIntervalRef.current);
+          wakeIntervalRef.current = null;
+        }
         setIsWaking(false);
 
         // If both failed, ensure statuses are set to offline
@@ -160,13 +187,20 @@ function Sidebar() {
       if (wakeIntervalRef.current) {
         clearInterval(wakeIntervalRef.current);
         wakeIntervalRef.current = null;
+      }
+      if (isMountedRef.current) {
         setIsWaking(false);
-
         // Set any non-online statuses to offline
         setBackendStatus((prev) => (prev === "online" ? "online" : "offline"));
         setAiStatus((prev) => (prev === "online" ? "online" : "offline"));
       }
     }, 90000);
+  };
+
+  // Manual refresh status (click on status to refresh)
+  const refreshStatus = async () => {
+    if (isWaking) return;
+    await checkAllServices();
   };
 
   // Get status display info
@@ -324,6 +358,14 @@ function Sidebar() {
           <div className="status-header">
             <Server size={16} />
             <span>System Status</span>
+            <button
+              className="status-refresh-btn"
+              onClick={refreshStatus}
+              disabled={isWaking}
+              title="Refresh status"
+            >
+              <RefreshCw size={12} className={isWaking ? "spinning" : ""} />
+            </button>
           </div>
 
           <div className="status-items">

@@ -391,3 +391,52 @@
     width: 260px;
   }
 }
+
+
+
+/* Add this inside the System Status section in sidebar.css */
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7c7f98;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.status-header svg {
+  color: #7c7f98;
+}
+
+/* NEW: Refresh button inside header */
+.status-refresh-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: #7c7f98;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-refresh-btn:hover:not(:disabled) {
+  color: #818cf8;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.status-refresh-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.status-refresh-btn .spinning {
+  animation: spin 1s linear infinite;
+}

@@ -220,14 +220,20 @@
   margin-top: 16px;
 }
 
+ 
 .loading-state {
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60vh;
-  color: #6b7280;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #000;
   font-family: "Manrope", sans-serif;
-  font-size: 16px;
+  font-size: 16px;}
+
 }
 
 /* ===================== */
