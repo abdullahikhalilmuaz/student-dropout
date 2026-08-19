@@ -63,13 +63,12 @@ function AddStudent() {
       // Auto-scroll to result after it renders
       setTimeout(() => {
         if (resultRef.current) {
-          resultRef.current.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
+          resultRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
           });
         }
       }, 100);
-
     } catch (err) {
       console.error(err);
       alert("Failed to add student. Please try again.");
@@ -90,7 +89,10 @@ function AddStudent() {
         <div className="dashboard-content">
           <div className="add-student-container">
             <h2>Add New Student</h2>
-            <p>Enter student information and get AI-powered dropout risk prediction</p>
+            <p>
+              Enter student information and get AI-powered dropout risk
+              prediction
+            </p>
 
             {/* Student Information Section */}
             <div className="section-header">
@@ -231,21 +233,25 @@ function AddStudent() {
 
             {/* AI Prediction Result - New Design */}
             {predictionResult && (
-              <div 
+              <div
                 ref={resultRef}
                 className={`prediction-result-card ${predictionResult.risk.toLowerCase()}`}
               >
                 <button className="close-result-btn" onClick={closeResult}>
                   <X size={20} />
                 </button>
-                
+
                 <div className="prediction-header">
                   <h3>AI Prediction Result</h3>
-                  <span className="prediction-subtitle">Risk assessment using Machine Learning</span>
+                  <span className="prediction-subtitle">
+                    Risk assessment using Machine Learning
+                  </span>
                 </div>
 
                 <div className="prediction-risk-badge">
-                  <div className={`risk-level-badge ${predictionResult.risk.toLowerCase()}`}>
+                  <div
+                    className={`risk-level-badge ${predictionResult.risk.toLowerCase()}`}
+                  >
                     {predictionResult.risk}
                   </div>
                 </div>
@@ -253,7 +259,9 @@ function AddStudent() {
                 <div className="prediction-details-grid">
                   <div className="prediction-detail-item">
                     <span className="detail-label">Risk Level</span>
-                    <span className={`detail-value risk ${predictionResult.risk.toLowerCase()}`}>
+                    <span
+                      className={`detail-value risk ${predictionResult.risk.toLowerCase()}`}
+                    >
                       {predictionResult.risk}
                     </span>
                   </div>
@@ -265,11 +273,17 @@ function AddStudent() {
                   </div>
                 </div>
 
-                <div className={`prediction-warning ${predictionResult.risk.toLowerCase()}`}>
+                <div
+                  className={`prediction-warning ${predictionResult.risk.toLowerCase()}`}
+                >
                   <AlertTriangle size={18} />
                   <p>
-                    <strong>This student has a high probability of dropout.</strong><br />
-                    Immediate attention is recommended.
+                    <strong>
+                      This student has a {predictionResult.risk} probability of
+                      dropout.
+                    </strong>
+                    <br />
+                    Taking IMMEDIATE attention is always recommended.
                   </p>
                 </div>
               </div>
